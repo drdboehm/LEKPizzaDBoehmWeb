@@ -5,8 +5,7 @@ package com.daa.model;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,9 @@ import java.util.List;
  *
  * @author dboehm
  */
-public class Bestellung {
+public class Bestellung implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Gericht> gerichte;
 // "preis" need to be formatted, typed, stored and checked

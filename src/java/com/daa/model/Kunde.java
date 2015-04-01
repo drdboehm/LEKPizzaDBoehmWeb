@@ -6,6 +6,7 @@
 package com.daa.model;
 
 import com.daa.util.GConnection;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +18,9 @@ import org.jboss.logging.Logger;
  *
  * @author dboehm
  */
-public class Kunde extends GConnection {
+public class Kunde extends GConnection implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private String username;
     private String vorname;
     private String nachname;

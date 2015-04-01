@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
  */
 public class OrderBean extends GConnection implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private Kunde kunde;
     private List<Gericht> bestellung;
     private final List<Gericht> gerichte;

@@ -5,12 +5,15 @@
  */
 package com.daa.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author dboehm
  */
-public class Gericht {
+public class Gericht implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private Integer gerichtId;
     private String bezeichnung;
     private Double preis;
