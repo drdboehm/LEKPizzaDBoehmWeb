@@ -6,7 +6,7 @@
         <title>Bärenhunger Pizzaversand</title>
     </h:head>
     <h:body>
-          <h1>Bärenhunger Pizzaversand für ... </h1>
+        <h1>Bärenhunger Pizzaversand für ... </h1>
         <h:form>
             <h:panelGrid columns="4">
                 <h:outputLabel for="inUsername" value="Username:" />   
@@ -26,7 +26,7 @@
                 <h:outputLabel for="inOrt" value="Ort" />   
                 <h:inputText id="inOrt" value="#{kundenController.currentKunde.ort}"/>
             </h:panelGrid>
-                    <h:commandButton action="#{kundenController.currentKunde}" value="Speichern" />
+            <h:commandButton action="#{kundenController.save()}" value="Speichern" />
         </h:form> 
         <h:form>
             <h:dataTable value="#{bestellController.gerichte}" var="gericht">
@@ -43,8 +43,8 @@
                     <h:inputText id="amount" value="#{gericht.amount}"/>
                 </h:column>
             </h:dataTable>
-            <!--<h:commandButton action="#{gericht.amount}" value="Speichern" />-->
-            </h:form>
+            <h:commandButton action="#{gericht.amount}" value="Speichern" />
+        </h:form>
     </h:body>
 </html>
 

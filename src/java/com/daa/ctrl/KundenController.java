@@ -12,7 +12,7 @@ import javax.inject.Named;
 @SessionScoped
 public class KundenController extends GConnection implements Serializable {
 
-    private Kunde currentKunde;
+    private Kunde currentKunde = new Kunde();
     private Bestellung bestellung;
     
     public KundenController() {
@@ -38,5 +38,8 @@ public class KundenController extends GConnection implements Serializable {
     public Kunde createKunde() {
         return currentKunde = new Kunde();  
     } 
+    public String save() {
+        return "kunden";
+    }
     
 }
