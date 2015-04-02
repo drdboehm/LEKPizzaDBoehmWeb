@@ -5,16 +5,10 @@ import com.daa.model.Kunde;
 import com.daa.util.GConnection;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import org.jboss.logging.Logger;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
-@ManagedBean(name = "kundenController")
+@Named(value = "kundenController")
 @SessionScoped
 public class KundenController extends GConnection implements Serializable {
 
