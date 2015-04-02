@@ -22,6 +22,7 @@ public class Kunde extends GConnection implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String username;
+    private String password;
     private String vorname;
     private String nachname;
     private String strasse;
@@ -52,6 +53,14 @@ public class Kunde extends GConnection implements Serializable {
 
     public Integer getLastId() {
         return lastId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setLastId(Integer lastId) {
@@ -131,54 +140,54 @@ public class Kunde extends GConnection implements Serializable {
         return out;
     }
 
-    public boolean store() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        // ResultSet for call and set lastId 
-        ResultSet rs = null;
-        boolean success = false;
-        try {
-            conn = getConnection();
-            if (conn == null) {
-                return false;
-            }
-            stmt = conn.prepareStatement("INSERT INTO Kunde (username, vorname, "
-                    + "nachname, strasse, hausnr, PLZ, Ort, firstEntryDate, lastEntryDate) "
-                    + "VALUES(?,?,?,?,?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
-            stmt.setString(1, this.username.trim());
-            stmt.setString(2, this.vorname.trim());
-            stmt.setString(3, this.nachname.trim());
-            stmt.setString(4, this.strasse.trim());
-            stmt.setString(5, this.hausnr.trim());
-            stmt.setString(6, this.plz.trim());
-            stmt.setString(7, this.ort.trim());
-            int rows = stmt.executeUpdate();
-            conn.commit();
-            success = (rows == 1);
-            // store the last_insert_id of the Kunde object in lastId, 
-            rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
-            if (rs.next()) {
-                this.lastId = rs.getInt(1);
-            } else {
-                // throw an exception from here
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Kunde.class.getName()).log(Logger.Level.FATAL, null, ex);
-            success = false;
-        } finally {
-            try {
-                stmt.close();
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                conn.close();
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return success;
-    }
+//    public boolean store() {
+//        Connection conn = null;
+//        PreparedStatement stmt = null;
+//        // ResultSet for call and set lastId 
+//        ResultSet rs = null;
+//        boolean success = false;
+//        try {
+//            conn = getConnection();
+//            if (conn == null) {
+//                return false;
+//            }
+//            stmt = conn.prepareStatement("INSERT INTO Kunde (username, vorname, "
+//                    + "nachname, strasse, hausnr, PLZ, Ort, firstEntryDate, lastEntryDate) "
+//                    + "VALUES(?,?,?,?,?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+//            stmt.setString(1, this.username.trim());
+//            stmt.setString(2, this.vorname.trim());
+//            stmt.setString(3, this.nachname.trim());
+//            stmt.setString(4, this.strasse.trim());
+//            stmt.setString(5, this.hausnr.trim());
+//            stmt.setString(6, this.plz.trim());
+//            stmt.setString(7, this.ort.trim());
+//            int rows = stmt.executeUpdate();
+//            conn.commit();
+//            success = (rows == 1);
+//            // store the last_insert_id of the Kunde object in lastId, 
+//            rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+//            if (rs.next()) {
+//                this.lastId = rs.getInt(1);
+//            } else {
+//                // throw an exception from here
+//            }
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Kunde.class.getName()).log(Logger.Level.FATAL, null, ex);
+//            success = false;
+//        } finally {
+//            try {
+//                stmt.close();
+//            } catch (SQLException ex) {
+//                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            try {
+//                conn.close();
+//            } catch (SQLException ex) {
+//                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        return success;
+//    }
 
 }
