@@ -50,7 +50,7 @@ public class BestellController extends GConnection implements Serializable {
     public void initializeMenu() {
         try {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT idGericht, bezeichnung, preis FROM gericht");
+            rs = stmt.executeQuery("SELECT idGericht, bezeichnung, preis FROM Gericht");
             while (rs.next()) {
                 Gericht gericht = new Gericht(rs.getInt("idGericht"), rs.getString("BEZEICHNUNG"),
                         rs.getDouble("PREIS"));
