@@ -67,10 +67,13 @@
                             <h:outputText value="#{gericht.bezeichnung}" />
                         </h:column>
                         <h:column>
-                            <h:outputText value="#{gericht.preis}" />
+                            <h:outputText id="amount" value="#{gericht.amount} x "/>  
                         </h:column>
                         <h:column>
-                            <h:outputText id="amount" value="#{gericht.amount}"/>
+                          <h:outputText value="#{gericht.preis} € = " />
+                        </h:column>
+                         <h:column>
+                             <h:outputText value="#{gericht.preis * gericht.amount} €" />
                         </h:column>
                     </h:dataTable>
                     <h:commandButton action="#{bestellController.resetGerichte()}" value="Ändern" />

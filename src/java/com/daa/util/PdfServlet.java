@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.servlet.annotation.WebServlet;
@@ -31,8 +32,10 @@ import javax.servlet.http.HttpSession;
  */
 //@WebServlet(name = "RechnungPdf", urlPatterns = "/pdfdokumente/PizzaRechnung.pdf")
 public class PdfServlet extends HttpServlet {
-@EJB
-BestellController bestellung;
+// Name der Instanz der ManagedBean muss 
+    @Inject
+    private BestellController bestellController;
+
     /**
      *
      * @param req
@@ -52,45 +55,45 @@ BestellController bestellung;
             document.open();
             document.add(new Paragraph("Bestellbestätigung für Deti "));
 
-            document.add(new Paragraph(bestellung.toString()));
+            document.add(new Paragraph(bestellController.toString()));
 
-//             document.add(new Paragraph(order.getCurrentKunde().getVorname()+ " " + 
-//                    order.getCurrentKunde().getNachname()));
-//             document.add(new Paragraph(order.getCurrentKunde().getStrasse() + " " + 
-//                    order.getCurrentKunde().getHausnr()));
-//             document.add(new Paragraph(order.getCurrentKunde().getPlz() + " " + 
-//                    order.getCurrentKunde().getOrt()));
-//              document.add(new Paragraph());
-//            // style the table with different column sizes
-//            float[] relativeWidth = {0.1f, 0.4f, 0.1f, 0.2f, 0.2f};
-//            PdfPTable table = new PdfPTable(relativeWidth);
-//            Integer amount = 0;
-//            Double price = 0.0;
-//            Double totalPrice = 0.0;
-//            // the header of the table
-//            table.addCell("Pos.");
-//            table.addCell("Bezeichnung");
-//            table.addCell("Anzahl");
-//            table.addCell("Einzelpreis");
-//            table.addCell("Gesamtpreis");
-//            // write the order list through the for loop
-//            for (int i = 0; i < order.getBestellGerichte().size(); i++) {
-//                document.add(new Paragraph());
-//                table.addCell((i + 1) + ". ");
-//                table.addCell(order.getBestellGerichte().get(i).getBezeichnung());
-//                table.addCell(order.getBestellGerichte().get(i).getAmount().toString());
-//                price = order.getBestellGerichte().get(i).getPreis();
-//                amount = order.getBestellGerichte().get(i).getAmount();
-//                totalPrice = price * amount;
-//                table.addCell(price.toString() + " €");
-//                table.addCell(totalPrice.toString() + " €");
-//            }
-//            table.addCell("");
-//            table.addCell("");
-//            table.addCell("");
-//            table.addCell("Summe: ");
-//            table.addCell(String.valueOf(order.getCurrent().getTotalPay()) + " €");
-//            document.add(table);
+             document.add(new Paragraph(bestellController.getCurrentKunde().getVorname()+ " " + 
+                    bestellController.getCurrentKunde().getNachname()));
+             document.add(new Paragraph(bestellController.getCurrentKunde().getStrasse() + " " + 
+                    bestellController.getCurrentKunde().getHausnr()));
+             document.add(new Paragraph(bestellController.getCurrentKunde().getPlz() + " " + 
+                    bestellController.getCurrentKunde().getOrt()));
+              document.add(new Paragraph());
+            // style the table with different column sizes
+            float[] relativeWidth = {0.1f, 0.4f, 0.1f, 0.2f, 0.2f};
+            PdfPTable table = new PdfPTable(relativeWidth);
+            Integer amount = 0;
+            Double price = 0.0;
+            Double totalPrice = 0.0;
+            // the header of the table
+            table.addCell("Pos.");
+            table.addCell("Bezeichnung");
+            table.addCell("Anzahl");
+            table.addCell("Einzelpreis");
+            table.addCell("Gesamtpreis");
+            // write the order list through the for loop
+            for (int i = 0; i < bestellController.getBestellGerichte().size(); i++) {
+                document.add(new Paragraph());
+                table.addCell((i + 1) + ". ");
+                table.addCell(bestellController.getBestellGerichte().get(i).getBezeichnung());
+                table.addCell(bestellController.getBestellGerichte().get(i).getAmount().toString());
+                price = bestellController.getBestellGerichte().get(i).getPreis();
+                amount = bestellController.getBestellGerichte().get(i).getAmount();
+                totalPrice = price * amount;
+                table.addCell(price.toString() + " €");
+                table.addCell(totalPrice.toString() + " €");
+            }
+            table.addCell("");
+            table.addCell("");
+            table.addCell("");
+            table.addCell("Summe: ");
+            table.addCell(String.valueOf(bestellController.getCurrent().getTotalPay()) + " €");
+            document.add(table);
             document.close();
             OutputStream os = resp.getOutputStream();
             bos.writeTo(os);

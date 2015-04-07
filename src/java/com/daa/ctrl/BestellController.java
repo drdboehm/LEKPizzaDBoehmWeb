@@ -93,21 +93,10 @@ public class BestellController implements Serializable {
         this.bestellGerichte = bestellGerichte;
     }
 
-    public void initializeMenu() {
-        gerichte = transmitSaveBestellungSessionBean.initializeMenu();
-    }
-
-//    @PreDestroy
-//    public void delete() {
-//        try {
-//            conn.close();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(BestellController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     public String saveGerichte() {
         current = new Bestellung();
-        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpServletRequest req = 
+                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         ipdAndSession(req);
         Double totalPay = 0.0;
         for (Gericht g : gerichte) {
@@ -130,67 +119,16 @@ public class BestellController implements Serializable {
     }
 
     public String saveKunde() {
-// make NOT persitent here
-//        if (storeKunde()) {
         isKundeSet = true;
         return "index";
-//        } else {
-//            return "index";
-//        }
     }
 
     public String placeBestellung() {
-
-        return "bestellung";
+        if (transmitSaveBestellungSessionBean.storeEjb(current)) {
+            return "bestellung";
+        } else {
+            return "error";
+        }
     }
 
-//    public boolean storeKunde() {
-//        Connection conn = null;
-//        PreparedStatement stmt = null;
-//        // ResultSet for call and set lastId 
-//        ResultSet rs = null;
-//        boolean success = false;
-//        try {
-//            conn = getConnection();
-//            if (conn == null) {
-//                return success;
-//            }
-//            stmt = conn.prepareStatement("INSERT INTO Kunde (username, vorname, "
-//                    + "nachname, strasse, hausnr, PLZ, Ort, firstEntryDate, lastEntryDate) "
-//                    + "VALUES(?,?,?,?,?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
-//            stmt.setString(1, currentKunde.getUsername().trim());
-//            stmt.setString(2, currentKunde.getVorname().trim());
-//            stmt.setString(3, currentKunde.getNachname().trim());
-//            stmt.setString(4, currentKunde.getStrasse().trim());
-//            stmt.setString(5, currentKunde.getHausnr().trim());
-//            stmt.setString(6, currentKunde.getPlz().trim());
-//            stmt.setString(7, currentKunde.getOrt().trim());
-//            int rows = stmt.executeUpdate();
-//            conn.commit();
-//            success = (rows == 1);
-//            // storeKunde the last_insert_id of the Kunde object in lastId, 
-//            rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
-//            if (rs.next()) {
-//                this.lastKundeId = rs.getInt(1);
-//            } else {
-//                // throw an exception from here
-//            }
-//
-//        } catch (SQLException ex) {
-//            org.jboss.logging.Logger.getLogger(Kunde.class.getName()).log(org.jboss.logging.Logger.Level.FATAL, null, ex);
-//            success = false;
-//        } finally {
-//            try {
-//                stmt.close();
-//            } catch (SQLException ex) {
-//                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            try {
-//                conn.close();
-//            } catch (SQLException ex) {
-//                java.util.logging.Logger.getLogger(Kunde.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        return success;
-//    }
 }
