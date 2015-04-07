@@ -23,11 +23,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import sun.awt.X11.XConstants;
 
 @Named(value = "bestellController")
 @SessionScoped
 public class BestellController extends GConnection implements Serializable {
+      private static final long serialVersionUID = 1L;
 
     private Kunde currentKunde = new Kunde();
     private Integer lastKundeId;
@@ -61,7 +61,7 @@ public class BestellController extends GConnection implements Serializable {
     public void resetGerichte() {
         areGerichteChoosen = false;
     }
-    
+
     public BestellController() {
 
     }
@@ -140,7 +140,7 @@ public class BestellController extends GConnection implements Serializable {
             if (g.getAmount() != 0) {
                 totalPay += g.getPreis() * g.getAmount();
                 bestellGerichte.add(g);
-                System.out.print(g.getBezeichnung() + " " + g.getAmount());
+//                System.out.print(g.getBezeichnung() + " " + g.getAmount());
             }
         }
         current.setKeyKunde(currentKunde);
@@ -163,6 +163,12 @@ public class BestellController extends GConnection implements Serializable {
 //        } else {
 //            return "index";
 //        }
+    }
+
+    public String placeBestellung() {
+        
+
+        return "bestellung";
     }
 
     public boolean storeKunde() {

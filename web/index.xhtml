@@ -56,12 +56,10 @@
                 </h:form> 
             </c:otherwise>
         </c:choose>
-
         <c:choose>
             <c:when  test="#{bestellController.areGerichteChoosen }">
                 <h:form>
-                    
-                    <h:dataTable value="#{bestellController.gerichte}" var="gericht">
+                    <h:dataTable value="#{bestellController.bestellGerichte}" var="gericht">
                         <h:column>
                             <h:outputText value="#{gericht.gerichtId}" />
                         </h:column>
@@ -97,7 +95,14 @@
                     <h:commandButton action="#{bestellController.saveGerichte()}" value="Speichern" />
                 </h:form>
             </c:otherwise>
-            </c:choose>
+        </c:choose>
+        <c:choose>
+            <c:when  test="#{bestellController.areGerichteChoosen and bestellController.isKundeSet}">
+                <h:form> 
+                    <h:commandButton action="#{bestellController.placeBestellung()}" value="Bestellung abschicken" />
+                </h:form>
+            </c:when>
+        </c:choose>
     </h:body>
 </html>
 

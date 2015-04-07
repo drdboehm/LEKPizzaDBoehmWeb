@@ -7,6 +7,7 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <h1>Zusammenfassung Ihrer Bestellung</h1>
         <h:form>
             <h:panelGrid columns="4">
                 <h:outputLabel for="inUsername" value="Username:" />   
@@ -26,11 +27,8 @@
                 <h:outputLabel for="inOrt" value="Ort" />   
                 <h:outputText id="inOrt" value="#{bestellController.currentKunde.ort}"/>
             </h:panelGrid>
-          <!--  <h:commandButton action="#{bestellController.resetKunde()}" value="Ändern" /> -->
-        </h:form>
-        <h:form>
+        
             <h:dataTable value="#{bestellController.bestellGerichte}" var="gericht">
-
                 <h:column>
                     <h:outputText value="#{gericht.gerichtId}" />
                 </h:column>
@@ -38,15 +36,19 @@
                     <h:outputText value="#{gericht.bezeichnung}" />
                 </h:column><br/>
                 <h:column>
-                    <h:outputText value="#{gericht.amount}" /> 
+                    <h:outputText value="#{gericht.amount} x " /> 
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{gericht.preis} €" /> 
+                    <h:outputText value="#{gericht.preis} €  =  " /> 
                 </h:column>
-
+                <h:column>
+                    <h:outputText value="#{gericht.amount * gericht.preis} €" /> 
+                </h:column>
             </h:dataTable>
-            <h:commandButton action="#{bestellController.abschicken()}" value="Abschicken" /> -->
+            
         </h:form>
+         <a href="pdfdokumente/PizzaRechnung.pdf">Rechnung als PDF</a>
+         <a href="index.xhtml">Zurück zur Startseite ... </a>
     </h:body>
 </html>
 

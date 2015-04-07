@@ -5,7 +5,6 @@
  */
 package com.daa.util;
 
-import com.daa.bean.OrderBean;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,21 +27,21 @@ public class GConnection {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             //Get a connection
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbpizza", 
-                    "root", "5bA0PoKa");
+                    "root", "7_Zwerge");
             conn.setAutoCommit(false);
             return conn;
         } catch (SQLException ex) {
             System.out.println(ex.getStackTrace());
-              Logger.getLogger(OrderBean.class.getName()).log(Level.SEVERE, null, ex);
+              Logger.getLogger(GConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
             //Ausgaben zum Loggen
-              Logger.getLogger(OrderBean.class.getName()).log(Level.SEVERE, null, ex);
+              Logger.getLogger(GConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             //Ausgaben zum Loggen
-              Logger.getLogger(OrderBean.class.getName()).log(Level.SEVERE, null, ex);
+              Logger.getLogger(GConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             //Ausgaben zum Loggen
-              Logger.getLogger(OrderBean.class.getName()).log(Level.SEVERE, null, ex);
+              Logger.getLogger(GConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
