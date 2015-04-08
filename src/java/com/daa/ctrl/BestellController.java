@@ -1,6 +1,7 @@
 package com.daa.ctrl;
 
 import com.daa.ejb.TransmitSaveBestellungSessionBeanRemote;
+import com.daa.model.BestellWrapper;
 import com.daa.model.Bestellung;
 import com.daa.model.Gericht;
 import com.daa.model.Kunde;
@@ -26,6 +27,7 @@ public class BestellController implements Serializable {
     private TransmitSaveBestellungSessionBeanRemote transmitSaveBestellungSessionBean;
     private static final long serialVersionUID = 1L;
 
+    private BestellWrapper wrappedBestellung;
     private Kunde currentKunde = new Kunde();
     private Integer lastKundeId;
     private Bestellung current;
@@ -131,7 +133,11 @@ public class BestellController implements Serializable {
     }
 
     public String placeBestellung() {
-        if (transmitSaveBestellungSessionBean.storeEjb(current)) {
+        wrappedBestellung = new BestellWrapper();
+        wrappedBestellung.setBestellung(current);
+        wrappedBestellung.setGerichte(bestellGerichte);
+        wrappedBestellung.setKunde(currentKunde);
+        if (transmitSaveBestellungSessionBean.storeEjb(wrappedBestellung)) {
             return "bestellung";
         } else {
             return "error";
