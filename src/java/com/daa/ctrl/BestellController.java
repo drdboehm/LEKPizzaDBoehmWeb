@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+//
 
 @Named(value = "bestellController")
 @SessionScoped
@@ -32,6 +34,11 @@ public class BestellController implements Serializable {
     private boolean isKundeSet = false;
     private boolean areGerichteChoosen = false;
 
+    @PostConstruct
+    public void init() {
+        gerichte = transmitSaveBestellungSessionBean.initializeMenu();
+    }
+
     public boolean isIsKundeSet() {
         return isKundeSet;
     }
@@ -46,6 +53,7 @@ public class BestellController implements Serializable {
 
     public void resetGerichte() {
         areGerichteChoosen = false;
+         bestellGerichte.clear();
     }
 
     public BestellController() {
@@ -77,7 +85,6 @@ public class BestellController implements Serializable {
     }
 
     public List<Gericht> getGerichte() {
-        gerichte = transmitSaveBestellungSessionBean.initializeMenu();
         return gerichte;
     }
 
@@ -95,8 +102,8 @@ public class BestellController implements Serializable {
 
     public String saveGerichte() {
         current = new Bestellung();
-        HttpServletRequest req = 
-                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpServletRequest req
+                = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         ipdAndSession(req);
         Double totalPay = 0.0;
         for (Gericht g : gerichte) {

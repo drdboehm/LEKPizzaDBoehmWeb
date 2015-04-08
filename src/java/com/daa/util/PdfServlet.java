@@ -16,15 +16,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,7 +29,8 @@ import javax.servlet.http.HttpSession;
  */
 //@WebServlet(name = "RechnungPdf", urlPatterns = "/pdfdokumente/PizzaRechnung.pdf")
 public class PdfServlet extends HttpServlet {
-// Name der Instanz der ManagedBean muss 
+// Name der Instanz der ManagedBean muss im Namen mit der Class-Library die injiziert wird übereinstimmen
+
     @Inject
     private BestellController bestellController;
 
@@ -53,17 +51,15 @@ public class PdfServlet extends HttpServlet {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, bos);
             document.open();
-            document.add(new Paragraph("Bestellbestätigung für Deti "));
+            document.add(new Paragraph("Bestellbestätigung"));
 
-            document.add(new Paragraph(bestellController.toString()));
-
-             document.add(new Paragraph(bestellController.getCurrentKunde().getVorname()+ " " + 
-                    bestellController.getCurrentKunde().getNachname()));
-             document.add(new Paragraph(bestellController.getCurrentKunde().getStrasse() + " " + 
-                    bestellController.getCurrentKunde().getHausnr()));
-             document.add(new Paragraph(bestellController.getCurrentKunde().getPlz() + " " + 
-                    bestellController.getCurrentKunde().getOrt()));
-              document.add(new Paragraph());
+            document.add(new Paragraph(bestellController.getCurrentKunde().getVorname() + " "
+                    + bestellController.getCurrentKunde().getNachname()));
+            document.add(new Paragraph(bestellController.getCurrentKunde().getStrasse() + " "
+                    + bestellController.getCurrentKunde().getHausnr()));
+            document.add(new Paragraph(bestellController.getCurrentKunde().getPlz() + " "
+                    + bestellController.getCurrentKunde().getOrt()));
+            document.add(new Paragraph());
             // style the table with different column sizes
             float[] relativeWidth = {0.1f, 0.4f, 0.1f, 0.2f, 0.2f};
             PdfPTable table = new PdfPTable(relativeWidth);
