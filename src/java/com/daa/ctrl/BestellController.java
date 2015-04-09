@@ -5,16 +5,28 @@ import com.daa.model.BestellWrapper;
 import com.daa.model.Bestellung;
 import com.daa.model.Gericht;
 import com.daa.model.Kunde;
+import com.daa.util.NewJSFManagedBean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 //
@@ -26,6 +38,11 @@ public class BestellController implements Serializable {
     @EJB
     private TransmitSaveBestellungSessionBeanRemote transmitSaveBestellungSessionBean;
     private static final long serialVersionUID = 1L;
+
+    @Resource(mappedName = "jms/myPizzaBestellConnectionFactory")
+    private ConnectionFactory myPizzaBestellConnectionFactory;
+    @Resource(mappedName = "jms/myPizzaBestellQueue")
+    private Queue myPizzaBestellQueue;
 
     private BestellWrapper wrappedBestellung;
     private Kunde currentKunde = new Kunde();
@@ -55,7 +72,7 @@ public class BestellController implements Serializable {
 
     public void resetGerichte() {
         areGerichteChoosen = false;
-         bestellGerichte.clear();
+        bestellGerichte.clear();
     }
 
     public BestellController() {
@@ -137,11 +154,33 @@ public class BestellController implements Serializable {
         wrappedBestellung.setBestellung(current);
         wrappedBestellung.setGerichte(bestellGerichte);
         wrappedBestellung.setKunde(currentKunde);
-        if (transmitSaveBestellungSessionBean.storeEjb(wrappedBestellung)) {
-            return "bestellung";
-        } else {
-            return "error";
-        }
+        produceBestellung(wrappedBestellung);
+//        if (transmitSaveBestellungSessionBean.storeEjb(wrappedBestellung)) {
+        return "bestellung";
+//        } else {
+//            return "error";
+//        }
     }
 
+    public void produceBestellung(BestellWrapper wrappedBestellung) {
+        MessageProducer messageProducer;
+        TextMessage textMessage;
+        ObjectMessage objMessage;
+
+        System.out.println("BestellWrapper reference ? " + wrappedBestellung.toString());
+        System.out.println("Has myPizzaBestellConnectionFactory a reference ? " + myPizzaBestellConnectionFactory.toString());
+        System.out.println("Has myPizzaBestellQueue a reference ? " + myPizzaBestellQueue.toString());
+        try {
+            Connection connection = myPizzaBestellConnectionFactory.createConnection();
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            messageProducer = session.createProducer((Destination) myPizzaBestellQueue);
+            objMessage = session.createObjectMessage(wrappedBestellung);
+            messageProducer.send(objMessage);
+            messageProducer.close();
+            session.close();
+            connection.close();
+        } catch (JMSException jex) {
+            jex.printStackTrace();
+        }
+    }
 }
