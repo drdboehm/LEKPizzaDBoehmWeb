@@ -5,7 +5,6 @@ import com.daa.model.BestellWrapper;
 import com.daa.model.Bestellung;
 import com.daa.model.Gericht;
 import com.daa.model.Kunde;
-import com.daa.util.NewJSFManagedBean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,7 +15,6 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
