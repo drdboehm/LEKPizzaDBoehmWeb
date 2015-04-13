@@ -50,6 +50,7 @@ public class BestellController implements Serializable {
     private List<Gericht> bestellGerichte = new ArrayList<>();
     private boolean isKundeSet = false;
     private boolean areGerichteChoosen = false;
+    private Double totalPay = 0.0;
 
     @PostConstruct
     public void init() {
@@ -117,17 +118,28 @@ public class BestellController implements Serializable {
         this.bestellGerichte = bestellGerichte;
     }
 
+    public Double getTotalPay() {
+        return totalPay;
+    }
+
+    public void setTotalPay(Double totalPay) {
+        this.totalPay = totalPay;
+    }
+    
+
     public String saveGerichte() {
         current = new Bestellung();
+        /*
+        Get clients IP address
+         */
         HttpServletRequest req
                 = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         ipdAndSession(req);
-        Double totalPay = 0.0;
+        totalPay = 0.0;
         for (Gericht g : gerichte) {
             if (g.getAmount() != 0) {
                 totalPay += g.getPreis() * g.getAmount();
                 bestellGerichte.add(g);
-//                System.out.print(g.getBezeichnung() + " " + g.getAmount());
             }
         }
         current.setKeyKunde(currentKunde);
@@ -153,30 +165,25 @@ public class BestellController implements Serializable {
         wrappedBestellung.setGerichte(bestellGerichte);
         wrappedBestellung.setKunde(currentKunde);
         produceBestellung(wrappedBestellung);
-//        if (transmitSaveBestellungSessionBean.storeEjb(wrappedBestellung)) {
         return "bestellung";
-//        } else {
-//            return "error";
-//        }
     }
 
     public void produceBestellung(BestellWrapper wrappedBestellung) {
         MessageProducer messageProducer;
-        TextMessage textMessage;
+//        TextMessage textMessage;
         ObjectMessage objMessage;
 
         System.out.println("BestellWrapper reference ? " + wrappedBestellung.toString());
         System.out.println("Has myPizzaBestellConnectionFactory a reference ? " + myPizzaBestellConnectionFactory.toString());
         System.out.println("Has myPizzaBestellQueue a reference ? " + myPizzaBestellQueue.toString());
         try {
-            Connection connection = myPizzaBestellConnectionFactory.createConnection();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            messageProducer = session.createProducer((Destination) myPizzaBestellQueue);
-            objMessage = session.createObjectMessage(wrappedBestellung);
-            messageProducer.send(objMessage);
-            messageProducer.close();
-            session.close();
-            connection.close();
+            try (Connection connection = myPizzaBestellConnectionFactory.createConnection(); 
+                    Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+                messageProducer = session.createProducer((Destination) myPizzaBestellQueue);
+                objMessage = session.createObjectMessage(wrappedBestellung);
+                messageProducer.send(objMessage);
+                messageProducer.close();
+            }
         } catch (JMSException jex) {
             jex.printStackTrace();
         }

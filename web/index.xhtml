@@ -72,6 +72,7 @@
                              <h:outputText value="#{gericht.preis * gericht.amount} €" />
                         </h:column>
                     </h:dataTable>
+                    <h:outputText value="   Summe: #{bestellController.totalPay} €" /> <br />
                     <h:commandButton action="#{bestellController.resetGerichte()}" value="Ändern" />
                 </h:form>
             </c:when>

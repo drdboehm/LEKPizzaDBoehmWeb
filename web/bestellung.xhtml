@@ -43,6 +43,7 @@
                     <h:outputText value="#{gericht.amount * gericht.preis} €" /> 
                 </h:column>
             </h:dataTable>
+            <h:outputText value="   Summe: #{bestellController.totalPay} €" />
             
         </h:form>
          <a href="pdfdokumente/PizzaRechnung.pdf">Rechnung als PDF</a>
