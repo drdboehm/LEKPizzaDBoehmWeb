@@ -9,6 +9,7 @@ import com.daa.model.Kunde;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -28,7 +29,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +60,14 @@ public class BestellController implements Serializable {
     @PostConstruct
     public void init() {
         gerichte = transmitSaveBestellungSessionBean.initializeMenu();
+    }
+
+    public BestellWrapper getWrappedBestellung() {
+        return wrappedBestellung;
+    }
+
+    public void setWrappedBestellung(BestellWrapper wrappedBestellung) {
+        this.wrappedBestellung = wrappedBestellung;
     }
 
     public boolean isIsKundeSet() {
@@ -187,6 +195,9 @@ public class BestellController implements Serializable {
     }
 
     public String placeBestellung() {
+        // set the orderDate and IsOrdered = true
+        current.setOrderDate(new Date());
+        current.setIsOrdered(true);
         wrappedBestellung = new BestellWrapper();
         wrappedBestellung.setBestellung(current);
         wrappedBestellung.setGerichte(bestellGerichte);

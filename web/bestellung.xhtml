@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Zusammenfassung Ihrer Bestellung</title>
     </h:head>
@@ -25,7 +26,7 @@
                 <h:outputLabel for="inOrt" value="Ort" />   
                 <h:outputText id="inOrt" value="#{bestellController.currentKunde.ort}"/>
             </h:panelGrid>
-        
+
             <h:dataTable value="#{bestellController.bestellGerichte}" var="gericht">
                 <h:column>
                     <h:outputText value="#{gericht.gerichtId}" />
@@ -34,20 +35,30 @@
                     <h:outputText value="#{gericht.bezeichnung}" />
                 </h:column><br/>
                 <h:column>
-                    <h:outputText value="#{gericht.amount} x " /> 
+                    <h:outputText value="#{gericht.amount}" /> 
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{gericht.preis} €  =  " /> 
+                    <h:outputText value="#{gericht.preis}" >
+                        <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                         maxFractionDigits="2" type="currency" />
+                    </h:outputText>
                 </h:column>
                 <h:column>
-                    <h:outputText value="#{gericht.amount * gericht.preis} €" /> 
+                    <h:outputText value="#{gericht.amount * gericht.preis}" >
+                        <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                         maxFractionDigits="2" type="currency" />
+                    </h:outputText>
                 </h:column>
             </h:dataTable>
-            <h:outputText value="   Summe: #{bestellController.totalPay} €" />
-            
+            <h:outputText value="Summe:  " />
+            <h:outputText value="#{bestellController.totalPay}" >
+                <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                 maxFractionDigits="2" type="currency" />
+            </h:outputText>
+
         </h:form>
-         <a href="pdfdokumente/PizzaRechnung.pdf">Rechnung als PDF</a>
-         <a href="index.xhtml">Zurück zur Startseite ... </a>
+        <a href="pdfdokumente/PizzaRechnung.pdf">Rechnung als PDF</a>
+        <a href="index.xhtml">Zurück zur Startseite ... </a>
     </h:body>
 </html>
 

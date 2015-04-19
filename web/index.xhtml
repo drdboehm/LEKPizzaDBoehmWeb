@@ -115,13 +115,23 @@
                             <h:outputText id="amount" value="#{gericht.amount} x "/>  
                         </h:column>
                         <h:column>
-                            <h:outputText value="#{gericht.preis} € = " />
+                            <h:outputText value="#{gericht.preis}">
+                                <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                                 maxFractionDigits="2" type="currency" />
+                            </h:outputText>
                         </h:column>
                         <h:column>
-                            <h:outputText value="#{gericht.preis * gericht.amount} €" />
+                            <h:outputText value="#{gericht.preis * gericht.amount}" >
+                                <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                                 maxFractionDigits="2" type="currency" />
+                            </h:outputText>
                         </h:column>
                     </h:dataTable>
-                    <h:outputText value="   Summe: #{bestellController.totalPay} €" /> <br />
+                    <h:outputText value="Summe:  " />
+                    <h:outputText value="#{bestellController.totalPay}" >
+                        <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                         maxFractionDigits="2" type="currency" />
+                    </h:outputText><br />
                     <h:commandButton action="#{bestellController.resetGerichte()}" value="Ändern" />
                 </h:form>
             </c:when>
@@ -135,7 +145,10 @@
                             <h:outputText value="#{gericht.bezeichnung}" />
                         </h:column>
                         <h:column>
-                            <h:outputText value="#{gericht.preis}" />
+                            <h:outputText value="#{gericht.preis}" >
+                                <f:convertNumber currencySymbol="€" groupingUsed="true"
+                                                 maxFractionDigits="2" type="currency" />
+                            </h:outputText>
                         </h:column>
                         <h:column>
                             <h:inputText id="amount" value="#{gericht.amount}"/>

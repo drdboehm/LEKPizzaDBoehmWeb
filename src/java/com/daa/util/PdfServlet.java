@@ -14,6 +14,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -51,15 +54,19 @@ public class PdfServlet extends HttpServlet {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             PdfWriter.getInstance(document, bos);
             document.open();
+            SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+            Date orderDate = bestellController.getWrappedBestellung().getBestellung().getOrderDate();
+            document.add(new Paragraph("Datum: " + df.format(orderDate)));
             document.add(new Paragraph("Bestellbestätigung"));
-
+            document.add(new Paragraph("\n"));
             document.add(new Paragraph(bestellController.getCurrentKunde().getVorname() + " "
                     + bestellController.getCurrentKunde().getNachname()));
             document.add(new Paragraph(bestellController.getCurrentKunde().getStrasse() + " "
                     + bestellController.getCurrentKunde().getHausnr()));
             document.add(new Paragraph(bestellController.getCurrentKunde().getPlz() + " "
                     + bestellController.getCurrentKunde().getOrt()));
-            document.add(new Paragraph());
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph("\n"));
             // style the table with different column sizes
             float[] relativeWidth = {0.1f, 0.4f, 0.1f, 0.2f, 0.2f};
             PdfPTable table = new PdfPTable(relativeWidth);
@@ -81,15 +88,18 @@ public class PdfServlet extends HttpServlet {
                 price = bestellController.getBestellGerichte().get(i).getPreis();
                 amount = bestellController.getBestellGerichte().get(i).getAmount();
                 totalPrice = price * amount;
-                table.addCell(price.toString() + " €");
-                table.addCell(totalPrice.toString() + " €");
+                table.addCell(String.format("%8.2f €", price));
+                table.addCell(String.format("%8.2f €", totalPrice));
             }
             table.addCell("");
             table.addCell("");
             table.addCell("");
             table.addCell("Summe: ");
-            table.addCell(String.valueOf(bestellController.getCurrent().getTotalPay()) + " €");
+            table.addCell(String.format("%8.2f €", bestellController.getCurrent().getTotalPay()));
             document.add(table);
+            document.add(new Paragraph("\n\n\n"));
+            document.add(new Paragraph("Vielen Dank für Ihre Bestellung.\n\n"));
+            document.add(new Paragraph("Einer unserer Kuriere wird die Lieferung in etwa 15 Minuten unter der oben genannten Adresse abliefern."));
             document.close();
             OutputStream os = resp.getOutputStream();
             bos.writeTo(os);
