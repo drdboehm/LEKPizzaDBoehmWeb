@@ -18,4 +18,13 @@
         <managed-bean-class>com.daa.util.NewJSFManagedBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>-->
+    <application>
+        <message-bundle>com.daa.bundles.Messages_de</message-bundle>
+        
+    </application>
+    <managed-bean>
+        <managed-bean-name>logoutManager</managed-bean-name>
+        <managed-bean-class>com.daa.ctrl.LogoutManager</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

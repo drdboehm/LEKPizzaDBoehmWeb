@@ -14,7 +14,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -27,6 +31,7 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringUtils;
 //
 
 @Named(value = "bestellController")
@@ -125,7 +130,29 @@ public class BestellController implements Serializable {
     public void setTotalPay(Double totalPay) {
         this.totalPay = totalPay;
     }
+
+    public void validateAlpha(FacesContext context, UIComponent uiComponent, Object value) throws ValidatorException {
+        if (!StringUtils.isAlphaSpace((String) value)) {
+            HtmlInputText htmlInputText = (HtmlInputText) uiComponent;
+            FacesMessage facesMessage = new FacesMessage(htmlInputText.getLabel() + ": nur Buchstaben erlaubt");
+            throw new ValidatorException(facesMessage);
+        }
+    }
     
+    public void validateAlphaNumeric(FacesContext context, UIComponent uiComponent, Object value) throws ValidatorException {
+        if (!StringUtils.isAlphanumericSpace((String) value)) {
+            HtmlInputText htmlInputText = (HtmlInputText) uiComponent;
+            FacesMessage facesMessage = new FacesMessage(htmlInputText.getLabel() + ": nur Buchstaben und Zahlen erlaubt");
+            throw new ValidatorException(facesMessage);
+        }
+    }
+        public void validateNumeric(FacesContext context, UIComponent uiComponent, Object value) throws ValidatorException {
+        if (!StringUtils.isNumeric((String) value)) {
+            HtmlInputText htmlInputText = (HtmlInputText) uiComponent;
+            FacesMessage facesMessage = new FacesMessage(htmlInputText.getLabel() + ": nur Zahlen erlaubt");
+            throw new ValidatorException(facesMessage);
+        }
+    }
 
     public String saveGerichte() {
         current = new Bestellung();
@@ -177,7 +204,7 @@ public class BestellController implements Serializable {
         System.out.println("Has myPizzaBestellConnectionFactory a reference ? " + myPizzaBestellConnectionFactory.toString());
         System.out.println("Has myPizzaBestellQueue a reference ? " + myPizzaBestellQueue.toString());
         try {
-            try (Connection connection = myPizzaBestellConnectionFactory.createConnection(); 
+            try (Connection connection = myPizzaBestellConnectionFactory.createConnection();
                     Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
                 messageProducer = session.createProducer((Destination) myPizzaBestellQueue);
                 objMessage = session.createObjectMessage(wrappedBestellung);
